@@ -3,13 +3,13 @@ from django.db import models
 
 
 class Devices(models.Model):
-    TYPE_CHOICES = {
-        'laptop': 'Ноутбук',
-        'su': 'компьютер',
-        'monitor': 'Монитор',
-        'tablet': 'Планшет',
-        'smartphone': 'смартфон',
-    }
+    TYPE_CHOICES = [
+        ('laptop', 'Ноутбук'),
+        ('su', 'компьютер'),
+        ('monitor', 'Монитор'),
+        ('tablet', 'Планшет'),
+        ('smartphone', 'смартфон'),
+    ]
     type = models.CharField(max_length=10, choices=TYPE_CHOICES)
     model = models.ForeignKey('Models',
                               on_delete=models.SET_NULL,
@@ -88,10 +88,10 @@ class Specialists(models.Model):
 
 
 class Services(models.Model):
-    PROFILE_CHOICES = {
-        'mobile': 'Мобильные устройства',
-        'desktop': 'Компьютеры'
-    }
+    PROFILE_CHOICES = [
+        ('mobile', 'Мобильные устройства'),
+        ('desktop', 'Компьютеры'),
+    ]
     name = models.CharField(max_length=255)
     profile = models.CharField(max_length=7, choices=PROFILE_CHOICES)
     price = models.PositiveSmallIntegerField()
