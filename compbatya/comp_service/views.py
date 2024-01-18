@@ -20,7 +20,9 @@ class ServicesAPIList(generics.ListAPIView):
 
     def get_queryset(self):
         profile = self.kwargs.get('profile')
-        return Services.objects.filter(profile=profile)
+        if profile:
+            return Services.objects.filter(profile=profile)
+        return Services.objects.all()
 
 
 
@@ -30,7 +32,9 @@ class SpecialistsAPIList(generics.ListAPIView):
 
     def get_queryset(self):
         profile = self.kwargs.get('profile')
-        return Specialists.objects.filter(profile__contains=Specialists.PROFILE_CHOICES[profile])
+        if profile:
+            return Specialists.objects.filter(profile__contains=Specialists.PROFILE_CHOICES[profile])
+        return Specialists.objects.all()
     
 
 
