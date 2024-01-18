@@ -20,7 +20,7 @@ class SpecialistsSerializer(serializers.ModelSerializer):
 class RequestsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Requests
-        fields = ('manager', 'client', 'time')
+        fields = '__all__'
 
     
     def create(self, validated_data):
