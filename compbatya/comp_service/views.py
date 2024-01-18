@@ -1,14 +1,22 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
-from .models import Services, Specialists
+from rest_framework.pagination import PageNumberPagination
+from .models import Services, Specialists, Requests
 from .serializers import *
 
 
-# Create your views here.
+
+class SmallResultSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 20
+    
+
 
 class ServicesAPIList(generics.ListAPIView):
     serializer_class = ServicesSerializer
+    pagination_class = SmallResultSetPagination
 
     def get_queryset(self):
         profile = self.kwargs.get('profile')
@@ -18,6 +26,7 @@ class ServicesAPIList(generics.ListAPIView):
 
 class SpecialistsAPIList(generics.ListAPIView):
     serializer_class = SpecialistsSerializer
+    pagination_class = SmallResultSetPagination
 
     def get_queryset(self):
         profile = self.kwargs.get('profile')
