@@ -22,6 +22,10 @@ class Devices(models.Model):
     services = models.ManyToManyField('Services', related_name='services')
 
 
+    def __str__(self) -> str:
+        return f'{self.type} {self.model} {self.year}'
+
+
 
 class Models(models.Model):
     name = models.CharField(max_length=255)
@@ -59,6 +63,10 @@ class Requests(models.Model):
                                on_delete=models.SET_NULL,
                                null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return str(self.time)
     
 
 
