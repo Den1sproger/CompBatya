@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Services, Specialists, Requests
+from .models import Services, Specialists, Requests, Devices
 
 
 
@@ -25,3 +25,15 @@ class RequestsSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         return Requests.objects.create(**validated_data)
+    
+
+
+class DevicesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Devices
+        depth = 1
+        fields = '__all__'
+
+
+    def create(self, validated_data):
+        return Devices.objects.create(**validated_data)

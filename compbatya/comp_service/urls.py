@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import ServicesAPIList, SpecialistsAPIList, CreateRequest
+from .views import *
+
 
 
 urlpatterns = [
