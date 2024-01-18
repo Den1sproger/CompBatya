@@ -14,7 +14,7 @@ class Devices(models.Model):
     model = models.ForeignKey('Models',
                               on_delete=models.SET_NULL,
                               null=True)
-    age = models.PositiveSmallIntegerField(null=True, blank=True)
+    year = models.PositiveSmallIntegerField(null=True, blank=True)
     owner = models.ForeignKey('Owners',
                               on_delete=models.SET_NULL,
                               null=True)
