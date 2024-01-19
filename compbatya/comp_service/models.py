@@ -22,7 +22,9 @@ class Devices(models.Model):
     owner = models.ForeignKey('Owners',
                               on_delete=models.SET_NULL,
                               null=True)
-    status = models.BooleanField(choices=Status.choices, null=True, blank=True)
+    status = models.BooleanField(choices=Status.choices,
+                                 null=True, blank=True)
+    create_time = models.DateTimeField(auto_now_add=True)
     specialists = models.ManyToManyField('Specialists', related_name='devices')
     services = models.ManyToManyField('Services', related_name='services')
 
