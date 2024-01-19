@@ -5,8 +5,8 @@ from .models import *
 
 @admin.register(Devices)
 class DevicesAdmin(admin.ModelAdmin):
-    list_display = ('type', 'model', 'year', 'owner')
-    list_display_links = ('model', 'owner')
+    list_display = ('type', 'model', 'year', 'owner', 'status')
+    list_display_links = ('model', 'owner', 'status')
     list_editable = ('type', 'year')
     list_per_page = 10
 
