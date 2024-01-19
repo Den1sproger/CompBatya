@@ -9,14 +9,14 @@ class GetDataTestCase(APITestCase):
     fixtures = ['comp_service_brands.json',
                 'comp_service_devices.json',
                 'comp_service_managers.json',
-                'comp_service_models.json',
                 'comp_service_owners.json',
+                'comp_service_models.json',
                 'comp_service_services.json',
                 'comp_service_specialists.json']
 
     
     def setUp(self):
-        print('[INFO] Start test')
+        print('[INFO] Start get test')
 
 
     def test_get_all_specialists(self):
@@ -74,4 +74,55 @@ class GetDataTestCase(APITestCase):
 
 
     def tearDown(self):
-        print('[INFO] End test\n')
+        print('[INFO] End get test\n')
+
+
+
+class AddDataTests(APITestCase):
+    fixtures = ['comp_service_managers.json',
+                'comp_service_owners.json',
+                'comp_service_models.json',
+                'comp_service_brands.json',
+                'comp_service_services.json',
+                'comp_service_specialists.json']
+    
+
+    def setUp(self):
+        print('[INFO] Start add test')
+
+
+    def test_create_request(self):
+        url = reverse('create-request')
+        data = {
+            'manager': 1,
+            'client': 2,
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Requests.objects.count(), 1)
+
+
+    def test_create_device(self):
+        url = reverse('create-device')
+        data = {
+            'type': 'Ноутбук',
+            'model': 2,
+            'year': 2019,
+            'owner': 2,
+            'specialists': [
+                {'id': 3},
+                {'id': 6}
+            ],
+            'services': [
+                {'id': 7},
+                {'id': 9},
+                {'id': 14}
+            ]
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Devices.objects.count(), 1)
+
+
+    def tearDown(self):
+        print('[INFO] End add test\n')
