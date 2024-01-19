@@ -3,6 +3,10 @@ from django.db import models
 
 
 class Devices(models.Model):
+    class Status(models.IntegerChoices):
+        FAIL = 0, 'Не выполнен/Выполнен плохо'
+        SUCCESS = 1, 'Успешно выполнен'
+
     TYPE_CHOICES = [
         ('laptop', 'Ноутбук'),
         ('su', 'компьютер'),
@@ -18,6 +22,7 @@ class Devices(models.Model):
     owner = models.ForeignKey('Owners',
                               on_delete=models.SET_NULL,
                               null=True)
+    status = models.BooleanField(choices=Status.choices, null=True, blank=True)
     specialists = models.ManyToManyField('Specialists', related_name='devices')
     services = models.ManyToManyField('Services', related_name='services')
 
