@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from .models import Services, Specialists, Requests
@@ -18,6 +18,7 @@ class ServicesAPIList(generics.ListAPIView):
     serializer_class = ServicesSerializer
     pagination_class = SmallResultSetPagination
 
+
     def get_queryset(self):
         profile = self.kwargs.get('profile')
         if profile:
@@ -30,6 +31,7 @@ class SpecialistsAPIList(generics.ListAPIView):
     serializer_class = SpecialistsSerializer
     pagination_class = SmallResultSetPagination
 
+
     def get_queryset(self):
         profile = self.kwargs.get('profile')
         if profile:
@@ -41,12 +43,20 @@ class SpecialistsAPIList(generics.ListAPIView):
 class CreateRequest(generics.CreateAPIView):
     serializer_class = RequestsSerializer
     
+
     def post(self, request):
         serializer = RequestsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return Response({'request': serializer.data})
+        response = Response(
+            data={
+                'status': 'request successfully created',
+                'device': serializer.data
+            },
+            status=status.HTTP_201_CREATED
+        )
+        return response
     
 
 
@@ -58,7 +68,11 @@ class DeleteRequest(generics.DestroyAPIView):
         if not pk:
             return Response({"error": "Method DELETE is not allowed"})
         
-        Requests.objects.get(pk=pk).delete()
+        instance = Requests.objects.get(pk=pk).exists()
+        if not instance:
+            return Response({"error": "Object does not exists"})
+
+        instance.delete()
         return Response({'request': f'Successfully delete request with pk={pk}'})
     
 
@@ -72,6 +86,7 @@ class DevicesAPIList(generics.ListAPIView):
 
 class CreateDevice(generics.CreateAPIView):
     serializer_class = DevicesSerializer
+
 
     def post(self, request):
         serializer = DevicesSerializer(data=request.data)

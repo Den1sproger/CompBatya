@@ -9,10 +9,10 @@ class Devices(models.Model):
 
     TYPE_CHOICES = [
         ('laptop', 'Ноутбук'),
-        ('su', 'компьютер'),
+        ('su', 'Компьютер'),
         ('monitor', 'Монитор'),
         ('tablet', 'Планшет'),
-        ('smartphone', 'смартфон'),
+        ('smartphone', 'Смартфон'),
     ]
     type = models.CharField(max_length=10, choices=TYPE_CHOICES)
     model = models.ForeignKey('Models',
@@ -30,7 +30,7 @@ class Devices(models.Model):
 
 
     def __str__(self) -> str:
-        return f'{self.type} {self.model} {self.year}'
+        return f'{self.type} | {self.model} | {self.year}'
 
 
 
@@ -98,7 +98,7 @@ class Specialists(models.Model):
 
 
     def __str__(self):
-        return f'{self.last_name} {self.first_name}'
+        return f'{self.last_name} {self.first_name} | {self.profile}'
 
 
 
