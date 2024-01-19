@@ -6,3 +6,5 @@ migrate:
 	cd compbatya && python3 manage.py migrate
 admin:
 	cd compbatya && python3 manage.py createsuperuser
+all-tests:
+	cd compbatya && python3 manage.py test .
