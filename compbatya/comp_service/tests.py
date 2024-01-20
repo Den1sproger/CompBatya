@@ -105,19 +105,12 @@ class AddDataTests(APITestCase):
     def test_create_device(self):
         url = reverse('create-device')
         data = {
-            'type': 'Ноутбук',
-            'model': 2,
-            'year': 2019,
-            'owner': 2,
-            'specialists': [
-                {'id': 3},
-                {'id': 6}
-            ],
-            'services': [
-                {'id': 7},
-                {'id': 9},
-                {'id': 14}
-            ]
+            "type": "laptop",
+            "model": 2,
+            "year": 2019,
+            "owner": 2,
+            "specialists": [3, 6],
+            "services": [7, 9, 14]
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -126,3 +119,29 @@ class AddDataTests(APITestCase):
 
     def tearDown(self):
         print('[INFO] End add test\n')
+
+
+
+class UpdateDataTests(APITestCase):
+    fixtures = ['comp_service_owners.json',
+                'comp_service_models.json',
+                'comp_service_brands.json',
+                'comp_service_services.json',
+                'comp_service_specialists.json']
+
+    def setUp(self):
+        print('[INFO] Start update test')
+
+
+    def test_update_device_status(self):
+        pk = 1
+        url = reverse('update-device', args=(pk,))
+        data = {
+            'status': 1
+        }
+        response = self.client.patch(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+    def tearDown(self):
+        print('[INFO] End update test\n')

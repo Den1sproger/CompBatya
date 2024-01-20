@@ -51,7 +51,7 @@ class CreateRequest(generics.CreateAPIView):
 
         response = Response(
             data={
-                'status': 'request successfully created',
+                'msg': 'request successfully created',
                 'device': serializer.data
             },
             status=status.HTTP_201_CREATED
@@ -73,7 +73,7 @@ class DeleteRequest(generics.DestroyAPIView):
             return Response({"error": "Object does not exists"})
 
         instance.delete()
-        return Response({'request': f'Successfully delete request with pk={pk}'})
+        return Response({'msg': f'Successfully delete request with pk={pk}'})
     
 
 
@@ -93,7 +93,36 @@ class CreateDevice(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
+        response = Response(
+            data={
+                'msg': 'device successfully created',
+                'device': serializer.data
+            },
+            status=status.HTTP_201_CREATED
+        )
+        return response
+    
+
+
+class UpdateDevice(generics.UpdateAPIView):
+    serializer_class = DevicesSerializer
+
+
+    def patch(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': 'Method PATCH is not allowed'})
+        
+        try:
+            instance = Devices.objects.get(pk=pk)
+        except:
+            return Response({"error": "Object does not exists"})
+        
+        serializer = DevicesSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
         return Response({
-            'status': 'device successfully created',
+            'msg': 'device successfully updated',
             'device': serializer.data
         })

@@ -26,7 +26,7 @@ class Devices(models.Model):
                                  null=True, blank=True)
     create_time = models.DateTimeField(auto_now_add=True)
     specialists = models.ManyToManyField('Specialists', related_name='devices')
-    services = models.ManyToManyField('Services', related_name='services')
+    services = models.ManyToManyField('Services', related_name='devices')
 
 
     def __str__(self) -> str:
