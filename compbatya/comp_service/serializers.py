@@ -22,6 +22,7 @@ class RequestsSerializer(serializers.ModelSerializer):
 
 
 class DevicesSerializer(serializers.ModelSerializer):
+    # many-to-many fields
     specialists = serializers.PrimaryKeyRelatedField(many=True,
                                                      queryset=Specialists.objects.all())
     services = serializers.PrimaryKeyRelatedField(many=True,
@@ -54,7 +55,7 @@ class DevicesSerializer(serializers.ModelSerializer):
 
 
 class SpecialistsSerializer(serializers.ModelSerializer):
-    devices = DevicesSerializer(many=True)
+    devices = DevicesSerializer(many=True) # many-to-many field
 
     class Meta:
         model = Specialists

@@ -15,6 +15,8 @@ class SmallResultSetPagination(PageNumberPagination):
 
 
 class ServicesAPIList(generics.ListAPIView):
+    """View the all services"""
+
     serializer_class = ServicesSerializer
     pagination_class = SmallResultSetPagination
 
@@ -28,6 +30,8 @@ class ServicesAPIList(generics.ListAPIView):
 
 
 class SpecialistsAPIList(generics.ListAPIView):
+    """View the all specialists"""
+
     serializer_class = SpecialistsSerializer
     pagination_class = SmallResultSetPagination
 
@@ -41,6 +45,8 @@ class SpecialistsAPIList(generics.ListAPIView):
 
 
 class CreateRequest(generics.CreateAPIView):
+    """Create the request for a callback from client"""
+
     serializer_class = RequestsSerializer
     
 
@@ -61,7 +67,10 @@ class CreateRequest(generics.CreateAPIView):
 
 
 class DeleteRequest(generics.DestroyAPIView):
+    """Delete the request for a callback in the admin panel"""
+
     serializer_class = RequestsSerializer
+
 
     def delete(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
@@ -78,6 +87,8 @@ class DeleteRequest(generics.DestroyAPIView):
 
 
 class DevicesAPIList(generics.ListAPIView):
+    """View the all devices that were repaired at the service center"""
+
     serializer_class = DevicesSerializer
     pagination_class = SmallResultSetPagination
     queryset = Devices.objects.all()
@@ -85,6 +96,8 @@ class DevicesAPIList(generics.ListAPIView):
 
 
 class CreateDevice(generics.CreateAPIView):
+    """Create new device that will be repaired"""
+    
     serializer_class = DevicesSerializer
 
 
@@ -105,6 +118,8 @@ class CreateDevice(generics.CreateAPIView):
 
 
 class UpdateDevice(generics.UpdateAPIView):
+    """Update device status on the success or the fail"""
+
     serializer_class = DevicesSerializer
 
 
