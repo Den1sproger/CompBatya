@@ -19,25 +19,27 @@ class GetDataTestCase(APITestCase):
         print('[INFO] Start get test')
 
 
-    def test_get_all_specialists(self):
-        url = reverse('specialists-all')
+    def check_read_all(self, url_name: str) -> None:
+        url = reverse(url_name)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertLessEqual(len(response.data['results']), 10)
+
+
+    def test_get_all_specialists(self):
+        self.check_read_all('specialists-all')
 
 
     def test_get_all_services(self):
-        url = reverse('services-all')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertLessEqual(len(response.data['results']), 10)
+        self.check_read_all('services-all')
         
 
     def test_get_all_devices(self):
-        url = reverse('devices-all')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertLessEqual(len(response.data['results']), 10)
+        self.check_read_all('devices-all')
+
+
+    def test_get_all_requests(self):
+        self.check_read_all('requests-all')
 
 
     def test_get_specialists(self):

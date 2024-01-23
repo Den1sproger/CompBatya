@@ -44,6 +44,15 @@ class SpecialistsAPIList(generics.ListAPIView):
     
 
 
+class RequestsApiList(generics.ListAPIView):
+    """View the all requests for a callback"""
+
+    queryset = Requests.objects.all()
+    serializer_class = RequestsSerializer
+    pagination_class = SmallResultSetPagination
+
+    
+
 class CreateRequest(generics.CreateAPIView):
     """Create the request for a callback from client"""
 
