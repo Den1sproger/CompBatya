@@ -113,4 +113,4 @@ class Services(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return f'{self.name} | {Specialists.PROFILE_CHOICES[self.profile]}'
