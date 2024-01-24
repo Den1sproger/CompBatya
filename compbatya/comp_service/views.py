@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAdminUser
 from .models import Services, Specialists, Requests
 from .serializers import *
 
@@ -79,6 +80,7 @@ class DeleteRequest(generics.DestroyAPIView):
     """Delete the request for a callback in the admin panel"""
 
     serializer_class = RequestsSerializer
+    permission_classes = (IsAdminUser,)
 
 
     def delete(self, request, *args, **kwargs):
@@ -100,6 +102,7 @@ class DevicesAPIList(generics.ListAPIView):
 
     serializer_class = DevicesSerializer
     pagination_class = SmallResultSetPagination
+    permission_classes = (IsAdminUser,)
     queryset = Devices.objects.all()
 
 
@@ -108,6 +111,7 @@ class CreateDevice(generics.CreateAPIView):
     """Create new device that will be repaired"""
     
     serializer_class = DevicesSerializer
+    permission_classes = (IsAdminUser,)
 
 
     def post(self, request):
@@ -130,6 +134,7 @@ class UpdateDevice(generics.UpdateAPIView):
     """Update device status on the success or the fail"""
 
     serializer_class = DevicesSerializer
+    permission_classes = (IsAdminUser,)
 
 
     def patch(self, request, *args, **kwargs):
