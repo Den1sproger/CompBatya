@@ -86,11 +86,18 @@ class DeleteRequest(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         if not pk:
-            return Response({"error": "Method DELETE is not allowed"})
+            return Response(
+                data={"error": "Method DELETE is not allowed"},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
         
-        instance = Requests.objects.get(pk=pk).exists()
-        if not instance:
-            return Response({"error": "Object does not exists"})
+        try:
+            instance = Requests.objects.get(pk=pk)
+        except:
+            return Response(
+                data={"error": "Object does not exists"},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
         instance.delete()
         return Response({'msg': f'Successfully delete request with pk={pk}'})
@@ -140,12 +147,18 @@ class UpdateDevice(generics.UpdateAPIView):
     def patch(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         if not pk:
-            return Response({'error': 'Method PATCH is not allowed'})
+            return Response(
+                data={'error': 'Method PATCH is not allowed'},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
         
         try:
             instance = Devices.objects.get(pk=pk)
         except:
-            return Response({"error": "Object does not exists"})
+            return Response(
+                data={"error": "Object does not exists"},
+                status=status.HTTP_404_NOT_FOUND
+            )
         
         serializer = DevicesSerializer(data=request.data, instance=instance)
         serializer.is_valid(raise_exception=True)
