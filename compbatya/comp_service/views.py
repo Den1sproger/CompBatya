@@ -51,6 +51,7 @@ class RequestsApiList(generics.ListAPIView):
     queryset = Requests.objects.all()
     serializer_class = RequestsSerializer
     pagination_class = SmallResultSetPagination
+    permission_classes = (IsAdminUser,)
 
     
 
