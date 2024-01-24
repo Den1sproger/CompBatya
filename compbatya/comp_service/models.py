@@ -14,29 +14,48 @@ class Devices(models.Model):
         ('tablet', 'Планшет'),
         ('smartphone', 'Смартфон'),
     ]
-    type = models.CharField(max_length=10, choices=TYPE_CHOICES)
+    type = models.CharField(max_length=10,
+                            choices=TYPE_CHOICES,
+                            verbose_name='Тип устройства')
     model = models.ForeignKey('Models',
                               on_delete=models.SET_NULL,
-                              null=True)
-    year = models.PositiveSmallIntegerField(null=True, blank=True)
+                              null=True, verbose_name='Модель')
+    year = models.PositiveSmallIntegerField(null=True, blank=True,
+                                            verbose_name='Год выпуска')
     owner = models.ForeignKey('Owners',
                               on_delete=models.SET_NULL,
-                              null=True)
+                              null=True, verbose_name='Владелец')
     status = models.BooleanField(choices=Status.choices,
-                                 null=True, blank=True)
+                                 null=True, blank=True,
+                                 verbose_name='Статус')
     create_time = models.DateTimeField(auto_now_add=True)
-    specialists = models.ManyToManyField('Specialists', related_name='devices')
-    services = models.ManyToManyField('Services', related_name='devices')
+    specialists = models.ManyToManyField('Specialists', related_name='devices',
+                                         verbose_name='Специалисты')
+    services = models.ManyToManyField('Services', related_name='devices',
+                                      verbose_name='Услуги')
+
+
+    class Meta:
+        verbose_name = 'устройство'
+        verbose_name_plural = 'Устройства в ремонте'
 
 
     def __str__(self) -> str:
         return f'{self.type} | {self.model} | {self.year}'
+    
 
 
 
 class Models(models.Model):
-    name = models.CharField(max_length=255)
-    brand = models.ForeignKey('Brands', on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=255, verbose_name='Название')
+    brand = models.ForeignKey('Brands', on_delete=models.SET_NULL,
+                              null=True, verbose_name='Бренд')
+
+
+    class Meta:
+        verbose_name = 'модель'
+        verbose_name_plural = 'Модели'
+
 
     def __str__(self):
         return self.name
@@ -44,7 +63,13 @@ class Models(models.Model):
 
 
 class Brands(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name='Название')
+
+
+    class Meta:
+        verbose_name = 'бренд'
+        verbose_name_plural = 'Бренды'
+
 
     def __str__(self):
         return self.name
@@ -52,9 +77,16 @@ class Brands(models.Model):
 
 
 class Owners(models.Model):
-    name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=200)
-    email = models.EmailField(max_length=80, null=True, blank=True)
+    name = models.CharField(max_length=255, verbose_name='Имя')
+    phone_number = models.CharField(max_length=200, verbose_name='Телефон')
+    email = models.EmailField(max_length=80,
+                              null=True, blank=True,
+                              verbose_name='Почта')
+
+
+    class Meta:
+        verbose_name = 'владелец'
+        verbose_name_plural = 'Вдадельцы устройств'
 
 
     def __str__(self):
@@ -65,11 +97,17 @@ class Owners(models.Model):
 class Requests(models.Model):
     manager = models.ForeignKey('Managers',
                                 on_delete=models.SET_NULL,
-                                null=True)
+                                null=True, verbose_name='Менеджер')
     client = models.ForeignKey('Owners',
                                on_delete=models.SET_NULL,
-                               null=True, blank=True)
+                               null=True, blank=True,
+                               verbose_name='Клиент')
     time = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        verbose_name = 'заявка'
+        verbose_name_plural = 'Заявки на обратный звонок'
 
 
     def __str__(self):
@@ -78,8 +116,13 @@ class Requests(models.Model):
 
 
 class Managers(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255, verbose_name='Имя')
+    last_name = models.CharField(max_length=255, verbose_name='Фамилия')
+
+
+    class Meta:
+        verbose_name = 'менеджер'
+        verbose_name_plural = 'Менеджеры'
 
 
     def __str__(self):
@@ -88,13 +131,18 @@ class Managers(models.Model):
 
 
 class Specialists(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255, verbose_name='Имя')
+    last_name = models.CharField(max_length=255, verbose_name='Фамилия')
     PROFILE_CHOICES = {
         'mobile': 'Мобильные устройства',
         'desktop': 'Компьютеры'
     }
-    profile = models.CharField(max_length=32)
+    profile = models.CharField(max_length=32, verbose_name='Специализация')
+
+
+    class Meta:
+        verbose_name = 'специалист'
+        verbose_name_plural = 'Специалисты'
 
 
     def __str__(self):
@@ -107,9 +155,15 @@ class Services(models.Model):
         ('mobile', 'Мобильные устройства'),
         ('desktop', 'Компьютеры'),
     ]
-    name = models.CharField(max_length=255)
-    profile = models.CharField(max_length=7, choices=PROFILE_CHOICES)
-    price = models.PositiveSmallIntegerField()
+    name = models.CharField(max_length=255, verbose_name='Название')
+    profile = models.CharField(max_length=7, choices=PROFILE_CHOICES,
+                               verbose_name='Профиль')
+    price = models.PositiveSmallIntegerField(verbose_name='Цена')
+
+
+    class Meta:
+        verbose_name = 'услуга'
+        verbose_name_plural = 'Услуги'
 
 
     def __str__(self):
