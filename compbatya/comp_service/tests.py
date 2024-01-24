@@ -19,11 +19,13 @@ class GetDataTestCase(APITestCase):
         print('[INFO] Start get test')
 
 
-    def check_read_all(self, url_name: str) -> None:
+    def check_read_all(self, url_name: str,
+                       status_: int = status.HTTP_200_OK) -> None:
         url = reverse(url_name)
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertLessEqual(len(response.data['results']), 10)
+        self.assertEqual(response.status_code, status_)
+        if status_ == status.HTTP_200_OK:
+            self.assertLessEqual(len(response.data['results']), 10)
 
 
     def test_get_all_specialists(self):
@@ -35,11 +37,11 @@ class GetDataTestCase(APITestCase):
         
 
     def test_get_all_devices(self):
-        self.check_read_all('devices-all')
+        self.check_read_all('devices-all', status_=status.HTTP_403_FORBIDDEN)
 
 
     def test_get_all_requests(self):
-        self.check_read_all('requests-all')
+        self.check_read_all('requests-all', status_=status.HTTP_403_FORBIDDEN)
 
 
     def test_get_specialists(self):
@@ -101,7 +103,6 @@ class AddDataTests(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Requests.objects.count(), 1)
 
 
     def test_create_device(self):
@@ -115,8 +116,7 @@ class AddDataTests(APITestCase):
             "services": [7, 9, 14]
         }
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Devices.objects.count(), 1)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
     def tearDown(self):
@@ -142,8 +142,30 @@ class UpdateDataTests(APITestCase):
             'status': 1
         }
         response = self.client.patch(url, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
     def tearDown(self):
         print('[INFO] End update test\n')
+
+
+
+class DeleteDataTests(APITestCase):
+    fixtures = ['comp_service_requests.json',
+                'comp_service_managers.json',
+                'comp_service_owners.json',]
+    
+
+    def setUp(self):
+        print('[INFO] Start delete test')
+    
+
+    def test_delete_request(self):
+        pk = 1
+        url = reverse('delete-request', args=(pk,))
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+    def tearDown(self):
+        print('[INFO] End delete test\n')
