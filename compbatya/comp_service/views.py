@@ -161,7 +161,9 @@ class UpdateDevice(generics.UpdateAPIView):
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        serializer = DevicesSerializer(data=request.data, instance=instance)
+        serializer = DevicesSerializer(data=request.data,
+                                       instance=instance,
+                                       partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
