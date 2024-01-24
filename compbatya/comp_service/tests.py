@@ -63,7 +63,6 @@ class GetDataTestCase(APITestCase):
     def test_get_services(self):
         profile = 'desktop'
         url = reverse('services', args=(profile,))
-        print(url)
         response = self.client.get(url)
         result_count = len(response.data['results'])
 
@@ -84,6 +83,7 @@ class GetDataTestCase(APITestCase):
 
 class AddDataTests(APITestCase):
     fixtures = ['comp_service_managers.json',
+                'comp_service_devices.json',
                 'comp_service_owners.json',
                 'comp_service_models.json',
                 'comp_service_brands.json',
@@ -126,21 +126,21 @@ class AddDataTests(APITestCase):
 
 class UpdateDataTests(APITestCase):
     fixtures = ['comp_service_owners.json',
+                'comp_service_devices.json',
                 'comp_service_models.json',
                 'comp_service_brands.json',
                 'comp_service_services.json',
                 'comp_service_specialists.json']
+
 
     def setUp(self):
         print('[INFO] Start update test')
 
 
     def test_update_device_status(self):
-        pk = 1
+        pk = 2
         url = reverse('update-device', args=(pk,))
-        data = {
-            'status': 1
-        }
+        data = {'status': 1}
         response = self.client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
