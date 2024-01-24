@@ -11,7 +11,7 @@ urlpatterns = [
     path('specialists/<slug:profile>/', SpecialistsAPIList.as_view(), name='specialists'),
     path('services/<slug:profile>/', ServicesAPIList.as_view(), name='services'),
     path('request/', CreateRequest.as_view(), name='create-request'),
-    path('request/delete/<int:pk>/', DeleteRequest.as_view()),
+    path('request-delete/<int:pk>/', DeleteRequest.as_view(), name='delete-request'),
     path('device/', CreateDevice.as_view(), name='create-device'),
     path('device/<int:pk>', UpdateDevice.as_view(), name='update-device'),
 ]
