@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.core.cache import cache
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -25,9 +25,19 @@ class ServicesAPIList(generics.ListAPIView):
     def get_queryset(self):
         profile = self.kwargs.get('profile')
         if profile:
-            return Services.objects.filter(profile=profile)
-        return Services.objects.all()
+            result = cache.get(f'services_{profile}')
+            if not result:
+                result = Services.objects.filter(profile=profile)
+                cache.set(f'services_{profile}', result, 60 * 60)
+            return result
+        
+        result = cache.get('services')
+        if not result:
+            result = Services.objects.all()
+            cache.set('services', result, 60 * 60)
 
+        return result
+    
 
 
 class SpecialistsAPIList(generics.ListAPIView):
@@ -40,8 +50,18 @@ class SpecialistsAPIList(generics.ListAPIView):
     def get_queryset(self):
         profile = self.kwargs.get('profile')
         if profile:
-            return Specialists.objects.filter(profile__contains=Specialists.PROFILE_CHOICES[profile])
-        return Specialists.objects.all()
+            result = cache.get(f'specialists_{profile}')
+            if not result:
+                result = Specialists.objects.filter(profile__contains=Specialists.PROFILE_CHOICES[profile])
+                cache.set(f'specialists_{profile}', result, 60 * 60 * 24)
+            return result
+
+        result = cache.get('specialists')
+        if not result:
+            result = Specialists.objects.all()
+            cache.set('specialists', result, 60 * 60)
+
+        return result
     
 
 
