@@ -4,3 +4,5 @@ __pycache__
 ????_*.py
 test.py
 fixtures
+db.json
+.env
