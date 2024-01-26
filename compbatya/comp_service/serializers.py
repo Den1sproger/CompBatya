@@ -55,9 +55,6 @@ class DevicesSerializer(serializers.ModelSerializer):
 
 
 class SpecialistsSerializer(serializers.ModelSerializer):
-    devices = DevicesSerializer(many=True) # many-to-many field
-
     class Meta:
         model = Specialists
-        depth = 1
-        fields = ('id', 'first_name', 'last_name', 'profile', 'devices')
+        fields = ('id', 'first_name', 'last_name', 'profile')
