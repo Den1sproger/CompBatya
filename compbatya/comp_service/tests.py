@@ -88,10 +88,17 @@ class AddDataTests(APITestCase):
                 'comp_service_models.json',
                 'comp_service_brands.json',
                 'comp_service_services.json',
-                'comp_service_specialists.json']
+                'comp_service_specialists.json',
+                'auth_user.json']
     
 
     def setUp(self):
+        url_login = '/auth/token/login/'
+        response = self.client.post(url_login,
+                                    data={"username": "root",
+                                          "password": "qwerty12!"})
+        token = response.data['auth_token']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
         print('[INFO] Start add test')
 
 
@@ -116,10 +123,12 @@ class AddDataTests(APITestCase):
             "services": [7, 9, 14]
         }
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
     def tearDown(self):
+        url_logout = '/auth/token/logout/'
+        self.client.post(url_logout)
         print('[INFO] End add test\n')
 
 
@@ -130,10 +139,17 @@ class UpdateDataTests(APITestCase):
                 'comp_service_models.json',
                 'comp_service_brands.json',
                 'comp_service_services.json',
-                'comp_service_specialists.json']
+                'comp_service_specialists.json',
+                'auth_user.json']
 
 
     def setUp(self):
+        url_login = '/auth/token/login/'
+        response = self.client.post(url_login,
+                                    data={"username": "root",
+                                          "password": "qwerty12!"})
+        token = response.data['auth_token']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
         print('[INFO] Start update test')
 
 
@@ -142,10 +158,12 @@ class UpdateDataTests(APITestCase):
         url = reverse('update-device', args=(pk,))
         data = {'status': 1}
         response = self.client.patch(url, data)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
     def tearDown(self):
+        url_logout = '/auth/token/logout/'
+        self.client.post(url_logout)
         print('[INFO] End update test\n')
 
 
@@ -153,10 +171,18 @@ class UpdateDataTests(APITestCase):
 class DeleteDataTests(APITestCase):
     fixtures = ['comp_service_requests.json',
                 'comp_service_managers.json',
-                'comp_service_owners.json',]
+                'comp_service_owners.json',
+                'auth_user.json']
     
 
     def setUp(self):
+        url_login = '/auth/token/login/'
+        response = self.client.post(url_login,
+                                    data={"username": "root",
+                                          "password": "qwerty12!"})
+        print(response.data)
+        token = response.data['auth_token']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
         print('[INFO] Start delete test')
     
 
@@ -164,8 +190,10 @@ class DeleteDataTests(APITestCase):
         pk = 1
         url = reverse('delete-request', args=(pk,))
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
     def tearDown(self):
+        url_logout = '/auth/token/logout/'
+        self.client.post(url_logout)
         print('[INFO] End delete test\n')
