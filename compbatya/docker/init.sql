@@ -1,0 +1,2 @@
+-- Create DB
+CREATE DATABASE IF NOT EXISTS comp_batya;
