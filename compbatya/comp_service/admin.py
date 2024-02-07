@@ -58,9 +58,9 @@ class ManagersAdmin(admin.ModelAdmin):
 
 @admin.register(Specialists)
 class SpecialistsAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'profile')
-    list_display_links = None
-    list_editable = ('first_name', 'last_name', 'profile')
+    list_display = ('first_name', 'last_name', 'profile', 'image')
+    list_display_links = ('first_name', 'last_name')
+    list_editable = ('profile',)
     list_per_page = 10
 
 

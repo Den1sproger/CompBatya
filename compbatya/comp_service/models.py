@@ -138,6 +138,10 @@ class Specialists(models.Model):
         'desktop': 'Компьютеры'
     }
     profile = models.CharField(max_length=32, verbose_name='Специализация')
+    image = models.ImageField(max_length=300,
+                              upload_to='employee_images/',
+                              default=None, blank=True, null=True,
+                              verbose_name='Фото')
 
 
     class Meta:

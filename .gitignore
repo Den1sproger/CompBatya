@@ -7,3 +7,5 @@ fixtures
 db.json
 .env*
 redis/
+*.jpg
+*.png

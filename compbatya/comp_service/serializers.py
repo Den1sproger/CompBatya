@@ -57,4 +57,4 @@ class DevicesSerializer(serializers.ModelSerializer):
 class SpecialistsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Specialists
-        fields = ('id', 'first_name', 'last_name', 'profile')
+        fields = '__all__'
