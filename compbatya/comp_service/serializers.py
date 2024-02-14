@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Services, Specialists, Requests, Devices
+from .models import Services, Specialists, Requests, Devices, Owners
 
 
 
@@ -18,6 +18,12 @@ class RequestsSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         return Requests.objects.create(**validated_data)
+    
+
+    def update(self, instance, validated_data):
+        instance.manager = validated_data.get('manager', instance.manager)
+        instance.save()
+        return instance
     
 
 
@@ -58,3 +64,16 @@ class SpecialistsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Specialists
         fields = '__all__'
+
+
+
+class ClientsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Owners
+        fields = ('name', 'phone_number', 'email')
+
+
+    def create(self, validated_data):
+        new_client = Owners.objects.create(**validated_data)
+        new_client.requests.create()
+        return new_client

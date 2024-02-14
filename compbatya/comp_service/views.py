@@ -1,5 +1,6 @@
 from django.core.cache import cache
 from rest_framework import generics, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from .models import Services, Specialists, Requests
@@ -75,6 +76,28 @@ class RequestsApiList(generics.ListAPIView):
 
     
 
+class CreateClient(generics.CreateAPIView):
+    """Create the new client"""
+
+    serializer_class = ClientsSerializer
+
+
+    def post(self, request):
+        serializer = ClientsSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        response = Response(
+            data={
+                'msg': 'client successfully created',
+                'client': serializer.data
+            },
+            status=status.HTTP_201_CREATED
+        )
+        return response
+
+    
+
 class CreateRequest(generics.CreateAPIView):
     """Create the request for a callback from client"""
 
@@ -97,11 +120,39 @@ class CreateRequest(generics.CreateAPIView):
     
 
 
-class DeleteRequest(generics.DestroyAPIView):
-    """Delete the request for a callback in the admin panel"""
+class DeleteUpdateRequest(APIView):
+    """Delete and Update the request for a callback in the admin panel"""
 
     serializer_class = RequestsSerializer
     permission_classes = (IsAdmin,)
+
+
+    def patch(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response(
+                data={"error": "Method PATCH is not allowed"},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
+
+        try:
+            instance = Requests.objects.get(pk=pk)
+        except:
+            return Response(
+                data={"error": "Object does not exists"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        serializer = RequestsSerializer(data=request.data,
+                                        instance=instance,
+                                        partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({
+            'msg': 'Request successfully updated',
+            'request': serializer.data
+        })
 
 
     def delete(self, request, *args, **kwargs):
