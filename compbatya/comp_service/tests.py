@@ -102,6 +102,17 @@ class AddDataTests(APITestCase):
         print('[INFO] Start add test')
 
 
+    def test_create_client_and_request(self):
+        url = reverse('create-client')
+        data = {
+            "name": "Marik",
+            "phone_number": "6723573214",
+            "email": 'example@mail.com',
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
     def test_create_request(self):
         url = reverse('create-request')
         data = {
@@ -136,6 +147,8 @@ class AddDataTests(APITestCase):
 class UpdateDataTests(APITestCase):
     fixtures = ['comp_service_owners.json',
                 'comp_service_devices.json',
+                'comp_service_requests.json',
+                'comp_service_managers.json',
                 'comp_service_models.json',
                 'comp_service_brands.json',
                 'comp_service_services.json',
@@ -151,6 +164,14 @@ class UpdateDataTests(APITestCase):
         token = response.data['auth_token']
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
         print('[INFO] Start update test')
+
+
+    def test_update_request_manager(self):
+        pk = 3
+        url = reverse('request', args=(pk,))
+        data = {'manager': 2}
+        response = self.client.patch(url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
     def test_update_device_status(self):
