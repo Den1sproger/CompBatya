@@ -97,10 +97,13 @@ class Owners(models.Model):
 class Requests(models.Model):
     manager = models.ForeignKey('Managers',
                                 on_delete=models.SET_NULL,
-                                null=True, verbose_name='Менеджер')
+                                null=True, blank=True,
+                                related_name='requests',
+                                verbose_name='Менеджер')
     client = models.ForeignKey('Owners',
                                on_delete=models.SET_NULL,
                                null=True, blank=True,
+                               related_name='requests',
                                verbose_name='Клиент')
     time = models.DateTimeField(auto_now_add=True)
 
