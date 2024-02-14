@@ -1,4 +1,3 @@
-from django.test import TestCase
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework import status
@@ -201,7 +200,6 @@ class DeleteDataTests(APITestCase):
         response = self.client.post(url_login,
                                     data={"username": "root",
                                           "password": "qwerty12!"})
-        print(response.data)
         token = response.data['auth_token']
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
         print('[INFO] Start delete test')
@@ -209,7 +207,7 @@ class DeleteDataTests(APITestCase):
 
     def test_delete_request(self):
         pk = 1
-        url = reverse('delete-request', args=(pk,))
+        url = reverse('request', args=(pk,))
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

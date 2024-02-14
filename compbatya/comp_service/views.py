@@ -12,7 +12,7 @@ from .permissions import IsAdmin
 class SmallResultSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
-    max_page_size = 20
+    max_page_size = 100
     
 
 
@@ -112,7 +112,7 @@ class CreateRequest(generics.CreateAPIView):
         response = Response(
             data={
                 'msg': 'request successfully created',
-                'device': serializer.data
+                'request': serializer.data
             },
             status=status.HTTP_201_CREATED
         )
