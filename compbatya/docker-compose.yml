@@ -17,6 +17,7 @@ services:
       - docker/env/.env.dev
     volumes:
       - ./:/app
+      - ./media:/app/media
     depends_on:
       - dbmysql
       - redis
