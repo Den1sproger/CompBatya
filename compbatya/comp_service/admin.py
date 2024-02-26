@@ -46,14 +46,6 @@ class RequestsAdmin(admin.ModelAdmin):
     list_editable = ('manager', 'client')
     list_per_page = 10
 
-
-
-@admin.register(Managers)
-class ManagersAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name')
-    list_display_links = None
-    list_editable = ('first_name', 'last_name')
-
     
 
 @admin.register(Specialists)

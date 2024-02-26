@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 
 
@@ -95,7 +96,7 @@ class Owners(models.Model):
 
 
 class Requests(models.Model):
-    manager = models.ForeignKey('Managers',
+    manager = models.ForeignKey(get_user_model(),
                                 on_delete=models.SET_NULL,
                                 null=True, blank=True,
                                 related_name='requests',
@@ -116,21 +117,6 @@ class Requests(models.Model):
     def __str__(self):
         return str(self.time)
     
-
-
-class Managers(models.Model):
-    first_name = models.CharField(max_length=255, verbose_name='Имя')
-    last_name = models.CharField(max_length=255, verbose_name='Фамилия')
-
-
-    class Meta:
-        verbose_name = 'менеджер'
-        verbose_name_plural = 'Менеджеры'
-
-
-    def __str__(self):
-        return f'{self.last_name} {self.first_name}'
-
 
 
 class Specialists(models.Model):
