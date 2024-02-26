@@ -7,7 +7,7 @@ from .models import *
 class GetDataTestCase(APITestCase):
     fixtures = ['comp_service_brands.json',
                 'comp_service_devices.json',
-                'comp_service_managers.json',
+                'auth_user.json',
                 'comp_service_owners.json',
                 'comp_service_models.json',
                 'comp_service_services.json',
@@ -81,8 +81,7 @@ class GetDataTestCase(APITestCase):
 
 
 class AddDataTests(APITestCase):
-    fixtures = ['comp_service_managers.json',
-                'comp_service_devices.json',
+    fixtures = ['comp_service_devices.json',
                 'comp_service_owners.json',
                 'comp_service_models.json',
                 'comp_service_brands.json',
@@ -190,7 +189,6 @@ class UpdateDataTests(APITestCase):
 
 class DeleteDataTests(APITestCase):
     fixtures = ['comp_service_requests.json',
-                'comp_service_managers.json',
                 'comp_service_owners.json',
                 'auth_user.json']
     
