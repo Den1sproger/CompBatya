@@ -79,9 +79,10 @@ class Brands(models.Model):
 
 class Owners(models.Model):
     name = models.CharField(max_length=255, verbose_name='Имя')
-    phone_number = models.CharField(max_length=200, verbose_name='Телефон')
-    email = models.EmailField(max_length=80,
-                              null=True, blank=True,
+    phone_number = models.CharField(max_length=200, unique=True,
+                                    verbose_name='Телефон')
+    email = models.EmailField(max_length=80, null=True, 
+                              blank=True, unique=True,
                               verbose_name='Почта')
 
 
