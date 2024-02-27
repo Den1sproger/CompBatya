@@ -1,11 +1,13 @@
 from django.core.cache import cache
+from django.db.models import Q
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from .models import Services, Specialists, Requests
+from .models import Services, Specialists, Requests, Owners
 from .serializers import *
 from .permissions import IsAdmin
+from .tasks import send_mail_to_managers
 
 
 
@@ -83,9 +85,29 @@ class CreateClient(generics.CreateAPIView):
 
 
     def post(self, request):
+        phone = request.data['phone_number']
+        name = request.data['name']
+        try:
+            client_mail = request.data['email']
+        except KeyError:
+            client_mail = None
+
         serializer = ClientsSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            client = Owners.objects.get(
+                Q(phone_number=phone) | (Q(email=client_mail) & Q(email__isnull=False))
+            )
+            if client:
+                client.requests.create()
+            else:
+                return Response(
+                    data={'msg': 'Bad request'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        send_mail_to_managers.apply_async(args=[phone, name, client_mail])
 
         response = Response(
             data={
