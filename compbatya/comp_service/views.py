@@ -107,7 +107,7 @@ class CreateClient(generics.CreateAPIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-        send_mail_to_managers.apply_async(args=[phone, name, client_mail])
+        send_mail_to_managers.delay(phone, name, client_mail)
 
         response = Response(
             data={
