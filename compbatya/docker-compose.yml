@@ -62,4 +62,17 @@ services:
       - 6379
     volumes:
       - ./docker/redis/data:/data
-  
+
+  celery-worker:
+    build:
+      context: .
+    container_name: celery-worker
+    restart: always
+    command: celery -A compbatya worker --loglevel=info
+    volumes:
+      - ./:/app
+      - ./media:/app/media
+    env_file:
+      - docker/env/.env.dev
+    depends_on:
+      - redis
