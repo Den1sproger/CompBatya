@@ -5,3 +5,4 @@ Dockerfile
 makefile
 README.md
 .gitignore
+comp_service/migrations
