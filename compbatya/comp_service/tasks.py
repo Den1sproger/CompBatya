@@ -9,7 +9,7 @@ from celery import shared_task
 def send_mail_to_managers(phone: str, name: str,
                           client_mail: str = None) -> None:
     Users = get_user_model()
-    emails = Users.objects.filter(is_staff=True).values_list('email')
+    emails = Users.objects.filter(is_staff=True, is_superuser=False).values_list('email')
     emails = [i[0] for i in emails if i[0]]
     msg_text = f"Новая заявка!!!\n\nТелефон: {phone}\nКак обращаться: {name}\n" \
         f"E-mail: {client_mail if client_mail else '-'}"
