@@ -32,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = int(env('DEBUG'))
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS').split()
 
@@ -183,7 +183,7 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_HOST = env("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
-EMAIL_USE_SSL = env("EMAIL_USE_SSL")
+EMAIL_USE_SSL = int(env("EMAIL_USE_SSL"))
 
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
