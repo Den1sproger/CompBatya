@@ -114,8 +114,8 @@ class AddDataTests(APITestCase):
     def test_create_request(self):
         url = reverse('create-request')
         data = {
-            'manager': 1,
-            'client': 2,
+            'manager': 2,
+            'client': 36,
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -146,7 +146,6 @@ class UpdateDataTests(APITestCase):
     fixtures = ['comp_service_owners.json',
                 'comp_service_devices.json',
                 'comp_service_requests.json',
-                'comp_service_managers.json',
                 'comp_service_models.json',
                 'comp_service_brands.json',
                 'comp_service_services.json',
