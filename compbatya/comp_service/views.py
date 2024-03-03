@@ -1,9 +1,9 @@
 from django.core.cache import cache
 from django.db.models import Q
-from rest_framework import generics, status
-from rest_framework.views import APIView
+from rest_framework import generics, status, viewsets
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import action
 from .models import Services, Specialists, Requests, Owners
 from .serializers import *
 from .permissions import IsAdmin
@@ -65,16 +65,6 @@ class SpecialistsAPIList(generics.ListAPIView):
             cache.set('specialists', result, 60 * 60)
 
         return result
-    
-
-
-class RequestsApiList(generics.ListAPIView):
-    """View the all requests for a callback"""
-
-    queryset = Requests.objects.all()
-    serializer_class = RequestsSerializer
-    pagination_class = SmallResultSetPagination
-    permission_classes = (IsAdmin,)
 
     
 
@@ -120,13 +110,23 @@ class CreateClient(generics.CreateAPIView):
 
     
 
-class CreateRequest(generics.CreateAPIView):
-    """Create the request for a callback from client"""
+class RequestsViewSet(viewsets.ModelViewSet):
+    """The viewset for viewing, creating, editing and deleting requests"""
 
     serializer_class = RequestsSerializer
+    queryset = Requests.objects.all()
+
+
+    @action(detail=False, methods=['get'],
+            pagination_class = SmallResultSetPagination,
+            permission_classes=[IsAdmin])
+    def get_requests(self, request):
+        queryset = Requests.objects.all()
+        serializer = RequestsSerializer(queryset, many=True)
+        return Response(serializer.data)
     
 
-    def post(self, request):
+    def create(self, request):
         serializer = RequestsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -141,15 +141,8 @@ class CreateRequest(generics.CreateAPIView):
         return response
     
 
-
-class DeleteUpdateRequest(APIView):
-    """Delete and Update the request for a callback in the admin panel"""
-
-    serializer_class = RequestsSerializer
-    permission_classes = (IsAdmin,)
-
-
-    def patch(self, request, *args, **kwargs):
+    @action(detail=True, methods=['patch'], permission_classes=[IsAdmin])
+    def edit_request(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         if not pk:
             return Response(
@@ -175,9 +168,10 @@ class DeleteUpdateRequest(APIView):
             'msg': 'Request successfully updated',
             'request': serializer.data
         })
+    
 
-
-    def delete(self, request, *args, **kwargs):
+    @action(detail=True, methods=['delete'], permission_classes=[IsAdmin])
+    def delete_request(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         if not pk:
             return Response(
