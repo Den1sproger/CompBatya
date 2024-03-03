@@ -192,24 +192,22 @@ class RequestsViewSet(viewsets.ModelViewSet):
     
 
 
-class DevicesAPIList(generics.ListAPIView):
-    """View the all devices that were repaired at the service center"""
+class DevicesViewSet(viewsets.ModelViewSet):
+    """The viewset for viewing, createing and editing devices"""
 
     serializer_class = DevicesSerializer
-    pagination_class = SmallResultSetPagination
-    permission_classes = (IsAdmin,)
     queryset = Devices.objects.all()
-
-
-
-class CreateDevice(generics.CreateAPIView):
-    """Create new device that will be repaired"""
-    
-    serializer_class = DevicesSerializer
     permission_classes = (IsAdmin,)
 
 
-    def post(self, request):
+    @action(detail=False, methods=['get'], pagination_class=SmallResultSetPagination)
+    def get_devices_list(self, request):
+        queryset = Devices.objects.all()
+        serializer = DevicesSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+    def create(self, request):
         serializer = DevicesSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -222,17 +220,9 @@ class CreateDevice(generics.CreateAPIView):
             status=status.HTTP_201_CREATED
         )
         return response
-    
 
 
-class UpdateDevice(generics.UpdateAPIView):
-    """Update device status on the success or the fail"""
-
-    serializer_class = DevicesSerializer
-    permission_classes = (IsAdmin,)
-
-
-    def patch(self, request, *args, **kwargs):
+    def partial_update(self, request, *args, **kwargs):
         pk = kwargs.get('pk', None)
         if not pk:
             return Response(
