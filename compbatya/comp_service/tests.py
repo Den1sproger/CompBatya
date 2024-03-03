@@ -36,11 +36,11 @@ class GetDataTestCase(APITestCase):
         
 
     def test_get_all_devices(self):
-        self.check_read_all('devices-all', status_=status.HTTP_403_FORBIDDEN)
+        self.check_read_all('devices-get-devices-list', status_=status.HTTP_403_FORBIDDEN)
 
 
     def test_get_all_requests(self):
-        self.check_read_all('requests-all', status_=status.HTTP_403_FORBIDDEN)
+        self.check_read_all('requests-get-requests', status_=status.HTTP_403_FORBIDDEN)
 
 
     def test_get_specialists(self):
@@ -112,7 +112,7 @@ class AddDataTests(APITestCase):
 
 
     def test_create_request(self):
-        url = reverse('create-request')
+        url = reverse('requests-list')
         data = {
             'manager': 2,
             'client': 36,
@@ -122,7 +122,7 @@ class AddDataTests(APITestCase):
 
 
     def test_create_device(self):
-        url = reverse('create-device')
+        url = reverse('devices-list')
         data = {
             "type": "laptop",
             "model": 2,
@@ -165,7 +165,7 @@ class UpdateDataTests(APITestCase):
 
     def test_update_request_manager(self):
         pk = 3
-        url = reverse('request', args=(pk,))
+        url = reverse('requests-edit-request', args=(pk,))
         data = {'manager': 2}
         response = self.client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -173,7 +173,7 @@ class UpdateDataTests(APITestCase):
 
     def test_update_device_status(self):
         pk = 2
-        url = reverse('update-device', args=(pk,))
+        url = reverse('devices-detail', args=(pk,))
         data = {'status': 1}
         response = self.client.patch(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -204,7 +204,7 @@ class DeleteDataTests(APITestCase):
 
     def test_delete_request(self):
         pk = 1
-        url = reverse('request', args=(pk,))
+        url = reverse('requests-delete-request', args=(pk,))
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
